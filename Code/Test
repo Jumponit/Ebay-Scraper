@@ -12,12 +12,33 @@ try:
         ]
     }
     response = api.execute('findCompletedItems', api_request)
-    print(response.dict())
+    #print(response.dict())
 
-    #def parseDict(dict):
+    def parseDict(dit):
+        soldPrices = []
+        results = dit.get('searchResult')
+        itemList = results.get('item')
+        for item in itemList:
+            a = item.get('shippingInfo')
+            if type(a) == dict:
+                b = a.get('shippingServiceCost')
+                if type(b) == dict:
+                    c = b.get('value')
+                    shipping = float(c)
+                    d = item.get('sellingStatus')
+                    if type(d) == dict:
+                        e = d.get('convertedCurrentPrice')
+                        if type(e) == dict:
+                            f = e.get('value')
+                            soldAmount = float(f)
+                            soldPrices.append((shipping + soldAmount))
 
+        print len(soldPrices)
+        for x in soldPrices:
+            print x
 
-    def dumpclean(obj):
+    parseDict(response.dict())
+    """def dumpclean(obj):
         if type(obj) == dict:
             for k, v in obj.items():
                 if hasattr(v, '__iter__'):
@@ -32,8 +53,9 @@ try:
                 else:
                     print v
         else:
-            print obj
+            print obj"""
     """dumpclean(response.dict())"""
+
 except ConnectionError as e:
     print(e)
     print(e.response.dict())
