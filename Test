@@ -1,0 +1,39 @@
+from ebaysdk.finding import Connection as Finding
+from ebaysdk.exception import ConnectionError
+try:
+    api = Finding(config_file = "ebay.yaml")
+    api_request = {
+        'keywords': 'Fire Emblem: Path of Radiance',
+        'itemFilter': [
+            {'name': 'SoldItemsOnly', 'value': True},
+            {'name': 'LocatedIn', 'value': 'US'},
+            {'name': 'Condition', 'value': '4000'},
+            {'name': 'EndTimeFrom', 'value': '2016-01-01T00:00:00.000Z'}
+        ]
+    }
+    response = api.execute('findCompletedItems', api_request)
+    print(response.dict())
+
+    #def parseDict(dict):
+
+
+    def dumpclean(obj):
+        if type(obj) == dict:
+            for k, v in obj.items():
+                if hasattr(v, '__iter__'):
+                    print k
+                    dumpclean(v)
+                else:
+                    print '%s : %s' % (k, v)
+        elif type(obj) == list:
+            for v in obj:
+                if hasattr(v, '__iter__'):
+                    dumpclean(v)
+                else:
+                    print v
+        else:
+            print obj
+    """dumpclean(response.dict())"""
+except ConnectionError as e:
+    print(e)
+    print(e.response.dict())
