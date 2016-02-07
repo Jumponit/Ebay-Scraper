@@ -12,21 +12,24 @@ def parseDict(dit):
         soldPrices = []
         results = dit.get('searchResult')
         itemList = results.get('item')
-        for item in itemList:
-            a = item.get('shippingInfo')
-            if type(a) == dict:
-                b = a.get('shippingServiceCost')
-                if type(b) == dict:
-                    c = b.get('value')
-                    shipping = float(c)
-                    d = item.get('sellingStatus')
-                    if type(d) == dict:
-                        e = d.get('convertedCurrentPrice')
-                        if type(e) == dict:
-                            f = e.get('value')
-                            soldAmount = float(f)
-                            soldPrices.append((shipping + soldAmount))
-        return soldPrices
+        if (itemList != None):
+            for item in itemList:
+                a = item.get('shippingInfo')
+                if type(a) == dict:
+                    b = a.get('shippingServiceCost')
+                    if type(b) == dict:
+                        c = b.get('value')
+                        shipping = float(c)
+                        d = item.get('sellingStatus')
+                        if type(d) == dict:
+                            e = d.get('convertedCurrentPrice')
+                            if type(e) == dict:
+                                f = e.get('value')
+                                soldAmount = float(f)
+                                soldPrices.append((shipping + soldAmount))
+            return soldPrices
+        else :
+            print "Error, invalid item name, no results"
 
     #Test events
         #print len(soldPrices)
@@ -82,8 +85,8 @@ def median(lst):
 # The main events
 itemInfo = aquire()
 priceList = parseDict(search(itemInfo))
-for x in priceList:
-    print x
+#for x in priceList:
+    #print x
 mean = sum(priceList)/float(len(priceList))
 print "The mean of the list is: $" + "{0:.2f}".format(mean)
 median = median(priceList)
