@@ -1,0 +1,31 @@
+{	  
+	  "manifest_version": 2,
+	  
+	  "name": "Ebay price history for: ",
+	  "description": "Find item price history for ebay item",
+	  "version": "1.0",
+	  
+	  "omnibox": {
+	    "keyword": "eps"
+          },
+		  
+	  "icons": {
+	    "48": "icon.png"
+	  },
+	  
+	  "permissions": [
+		"tabs", "<all_urls>"
+	  ],
+	  
+	  "background": {
+	    "scripts": ["background.js"]
+	  },
+	  
+	  "minimum_chrome_version": "9",
+	 
+	  "browser_action": {
+		"default_icon": "icon.png",
+		"default_popup": "popup.html"
+		}
+		
+}
