@@ -10,8 +10,10 @@ import numpy as np #requires a separate pip install
 import matplotlib as mpl # requires a separate pip install
 import matplotlib.pyplot as plt
 import time
+import Tkinter
+from Tkinter import *
 
-# agg backeend is used to create plot as a .png
+# agg backend is used to create plot as a .png
 mpl.use('agg')
 
 # The method to parse the search response dictionary
@@ -37,7 +39,6 @@ def parseDict(dit):
             return soldPrices
         else :
             print "Error, invalid item name, no results"
-
     #Test events
         #print len(soldPrices)
         #for x in soldPrices:
@@ -67,6 +68,7 @@ def search(itemInfo, pageNum):
         print(e)
         print(e.response.dict())
 
+#The method that does the multi-page loop of the search
 def createPriceList(itemInfo):
     page = 1
     response = search(itemInfo, page)
@@ -87,19 +89,19 @@ def createPriceList(itemInfo):
         priceList = parseDict(response)
     return priceList
 
-
-
 # The function to get input from the user
 def aquire():
     info = []
     time.sleep(1)
-    name = raw_input('Enter the full item name you want to search: ')
+    name = str(1)
+    #name = raw_input('Enter the full item name you want to search: ')
     info.append(name)
     pastDate = date.today() - timedelta(days=90)
     datestr = pastDate.strftime('%Y-%m-%d') + 'T00:00:00.000Z'
     info.append(datestr)
     return info
 
+#The Method to get the median
 def median(lst):
     lst = sorted(lst)
     if len(lst) < 1:
@@ -109,23 +111,44 @@ def median(lst):
     else:
             return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
 
+def GUI():
+    main = Tkinter.Tk()
+    frame1 = Frame(main)
+    frame1.pack()
+    frame2 = Frame(main)
+    frame2.pack(side = BOTTOM)
+    frame3 = Frame(main)
+    frame3.pack(side = BOTTOM)
+
+    header_Label = Label(frame1, text = "Ebay Price Checker")
+    header_Label.pack()
+
+    search_Label = Label(frame1, text = "Item Name:  ")
+    search_Label.pack(side = LEFT)
+    search_Box = Entry(frame1)
+    search_Box.pack(fill = Tkinter.X, expand = 1, side = RIGHT)
+
+    search_Button = Tkinter.Button(frame3, text = "Search", font = ("Comic Sans MS", "10"))
+    search_Button.pack()
+
+    main.mainloop()
+
+def execute():
+    itemInfo = aquire()
+    priceList = createPriceList(itemInfo)
+    print "Number of entries found: %s" % len(priceList)
+    mean = sum(priceList)/float(len(priceList))
+    print "The mean of the list is: $" + "{0:.2f}".format(mean)
+    median = median(priceList)
+    print "The median of the list is: $" + "{0:.2f}".format(median)
+    sd = np.std(priceList)
+    print "The standard deviation of the list is: $" + "{0:.2f}".format(sd)
+    fig = plt.figure(1, figsize=(9,6))
+    ax = fig.add_subplot(111)
+    bp = ax.boxplot(priceList)
+    fig.savefig('fig1.png', bbox_inches='tight')
+    #for x in priceList:
+        #print x
+
 # The main events
-itemInfo = aquire()
-priceList = createPriceList(itemInfo)
-#for x in priceList:
-    #print x
-print "Number of entries found: %s" % len(priceList)
-mean = sum(priceList)/float(len(priceList))
-print "The mean of the list is: $" + "{0:.2f}".format(mean)
-median = median(priceList)
-print "The median of the list is: $" + "{0:.2f}".format(median)
-sd = np.std(priceList)
-print "The standard deviation of the list is: $" + "{0:.2f}".format(sd)
-
-fig = plt.figure(1, figsize=(9,6))
-
-ax = fig.add_subplot(111)
-
-bp = ax.boxplot(priceList)
-
-fig.savefig('fig1.png', bbox_inches='tight')
+GUI()
