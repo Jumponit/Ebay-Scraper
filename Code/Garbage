@@ -1,0 +1,21 @@
+{
+'itemId': '161968580501', 
+'topRatedListing': 'false', 
+'productId': {'_type': 'ReferenceID', 'value': '44953539'}, 
+'globalId': 'EBAY-US', 
+'title': 'Fire Emblem: Path of Radiance  (Nintendo GameCube, 2005)', 
+'country': 'US', 
+'primaryCategory': {'categoryId': '139973', 'categoryName': 'Video Games'}, 
+'autoPay': 'true', 
+'galleryURL': 'http://thumbs2.ebaystatic.com/m/mp-ltGhC9zW3VmgZVPAQOHA/140.jpg', 
+'shippingInfo': {'expeditedShipping': 'false', 'shipToLocations': 'US', 'shippingServiceCost': {'_currencyId': 'USD', 'value': '0.0'}, 'oneDayShippingAvailable': 'false', 'handlingTime': '3', 'shippingType': 'Free'}, 
+'location': 'State College,PA,USA', 
+'postalCode': '16803', 
+'returnsAccepted': 'false', 
+'viewItemURL': 'http://www.ebay.com/itm/Fire-Emblem-Path-Radiance-Nintendo-GameCube-2005-/161968580501', 
+'sellingStatus': {'currentPrice': {'_currencyId': 'USD', 'value': '95.0'}, 'convertedCurrentPrice': {'_currencyId': 'USD', 'value': '95.0'}, 'sellingState': 'Ended'}, 
+'paymentMethod': 'PayPal', 
+'isMultiVariationListing': 'false', 
+'condition': {'conditionId': '4000', 'conditionDisplayName': 'Very Good'}, 
+'listingInfo': {'listingType': 'FixedPrice', 'gift': 'false', 'bestOfferEnabled': 'true', 'startTime': '2016-02-04T17:09:27.000Z', 'buyItNowAvailable': 'false', 'endTime': '2016-02-04T19:51:00.000Z'}
+}
