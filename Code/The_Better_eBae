@@ -1,0 +1,156 @@
+# The_Ebae.py
+# The main program
+# Taylor Morris & Nich Phillips & Lindsey Titus
+
+
+from ebaysdk.finding import Connection as Finding
+from ebaysdk.exception import ConnectionError
+from datetime import date, timedelta
+import numpy as np #requires a separate pip install
+import matplotlib as mpl # requires a separate pip install
+import matplotlib.pyplot as plt
+import time
+import socket
+
+# agg backeend is used to create plot as a .png
+mpl.use('agg')
+
+# The method to parse the search response dictionary
+def parseDict(dit):
+        soldPrices = []
+        results = dit.get('searchResult')
+        itemList = results.get('item')
+        if (itemList != None):
+            for item in itemList:
+                a = item.get('shippingInfo')
+                if type(a) == dict:
+                    b = a.get('shippingServiceCost')
+                    if type(b) == dict:
+                        c = b.get('value')
+                        shipping = float(c)
+                        d = item.get('sellingStatus')
+                        if type(d) == dict:
+                            e = d.get('convertedCurrentPrice')
+                            if type(e) == dict:
+                                f = e.get('value')
+                                soldAmount = float(f)
+                                soldPrices.append((shipping + soldAmount))
+            return soldPrices
+        else :
+            print "Error, invalid item name, no results"
+
+    #Test events
+        #print len(soldPrices)
+        #for x in soldPrices:
+            #print x
+
+# The function that searches via the Ebay API
+def search(itemInfo, pageNum):
+    startDate = itemInfo[1]
+    item = itemInfo[0]
+    try:
+        api = Finding(config_file = "ebay.yaml")
+        api_request = {
+            'keywords': item,
+            'itemFilter': [
+                {'name': 'SoldItemsOnly', 'value': True},
+                {'name': 'LocatedIn', 'value': 'US'},
+                {'name': 'EndTimeFrom', 'value': startDate}
+            ],
+            'paginationInput': [
+                {'pageNumber': pageNum}
+            ]
+        }
+        response = api.execute('findCompletedItems', api_request)
+        #print response.dict()
+        return response.dict()
+    except ConnectionError as e:
+        print(e)
+        print(e.response.dict())
+
+def createPriceList(itemInfo):
+    page = 1
+    response = search(itemInfo, page)
+    pageOutput = response.get('paginationOutput')
+    pageNumbers = pageOutput.get('totalPages')
+    print "Number of Pages = %s" % pageNumbers
+    if (int(pageNumbers) > 1):
+        print "First Search!"
+        priceList = parseDict(response)
+        page+= 1
+        while page <= int(pageNumbers) and page < 100:
+            print "Nap Time! Number: %s" % (page-1)
+            time.sleep(3)
+            if page < int(pageNumbers):
+                print "OK! Next search!"
+            try:
+                priceList.extend(parseDict(search(itemInfo, page)))
+            except socket.timeout:
+                print "Caught a socket timeout! Moving on to next page"
+            page+= 1
+    else:
+        priceList = parseDict(response)
+    return priceList
+
+
+
+# The function to get input from the user
+def aquire():
+    info = []
+    time.sleep(1)
+    name = raw_input('Enter the full item name you want to search: ')
+    info.append(name)
+    pastDate = date.today() - timedelta(days=90)
+    datestr = pastDate.strftime('%Y-%m-%d') + 'T00:00:00.000Z'
+    info.append(datestr)
+    return info
+
+def median(lst):
+    lst = sorted(lst)
+    if len(lst) < 1:
+            return None
+    if len(lst) %2 == 1:
+            return lst[((len(lst)+1)/2)-1]
+    else:
+            return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+
+def outputResults(priceList):
+    print "Number of entries found: %s" % len(priceList)
+    mean = sum(priceList)/float(len(priceList))
+    print "The mean of the list is: $" + "{0:.2f}".format(mean)
+    med = median(priceList)
+    print "The median of the list is: $" + "{0:.2f}".format(med)
+    sd = np.std(priceList)
+    print "The standard deviation of the list is: $" + "{0:.2f}".format(sd)
+    fig = plt.figure(1, figsize=(9,6)) # create a figure object
+    fig.suptitle("Box Plot and Histogram of %s Price Data Over Past 90 Days" % itemInfo[0])
+    ax = fig.add_subplot(211) # add a subplot to the figure object
+    bp = ax.boxplot(priceList, notch=True, vert=False, showmeans=True)
+    #if (len(priceList) <= 500):
+    #    binNumber = 10
+    #elif (len(priceList) <= 750):
+    #    binNumber = 15
+    #else:
+    #    binNumber = 20
+    binNumber = len(priceList)/10
+    plt.subplot(212)
+    #(n, bins) = np.histogram(priceList, bins=50, normed=True)
+    #plt.plot(.5*(bins[1:]+bins[:-1]), n)
+    plt.hist(priceList, bins=binNumber, normed=True, histtype = 'step')
+    plt.show()
+
+
+
+# The main evencvxxts
+itemInfo = aquire()
+priceList = createPriceList(itemInfo)
+outputResults(priceList)
+
+
+# ransac algorithm for finding outliers of model
+# must determine model first for ransac
+# box and whisker plots and histogram
+# put data into dataframe
+# stats models
+# OLS is the simplist model
+# Logistic regression for decision or probability
