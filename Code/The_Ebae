@@ -6,6 +6,7 @@
 from ebaysdk.finding import Connection as Finding
 from ebaysdk.exception import ConnectionError
 from datetime import date, timedelta
+from collections import Counter
 import numpy as np #requires a separate pip install
 import matplotlib as mpl # requires a separate pip install
 import matplotlib.pyplot as plt
@@ -20,6 +21,7 @@ mpl.use('agg')
 mean_Text = ''
 med_Text = ''
 category_List = []
+category_Lookup = {}
 
 # The method to parse the search response dictionary
 def parseDict(dit):
@@ -161,6 +163,8 @@ def median(lst):
 
 #The function to create the GUI
 def GUI():
+    global category_Lookup
+
     root = Tkinter.Tk()
     root.withdraw()
     item_entry = Tkinter.StringVar()
@@ -180,6 +184,7 @@ def GUI():
         if item_entry != '' :
             if category_Select.curselection() != None:
                 execute(item_entry, category_Lookup.get(category_Select.get(ACTIVE)))
+                print mean_Text
                 mean_Display.config(text = str(mean_Text))
                 median_Display.config(text = str(med_Text))
             else:
@@ -242,6 +247,7 @@ def GUI():
 #The function to get the desired category from the user
 def initial_execute(item_name):
     global category_List
+    global category_Lookup
     pastDate = date.today() - timedelta(days=90)
     datestr = pastDate.strftime('%Y-%m-%d') + 'T00:00:00.000Z'
     try:
