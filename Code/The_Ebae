@@ -52,7 +52,6 @@ def parseDict(dit):
                                 times = fullTime.split('T')
                                 aTime = times[0]
                                 sellTime = datetime.strptime(aTime, "%Y-%m-%d")
-                                print 'sellTime is %s' % sellTime
                                 sellDates.append(sellTime)
                             else :
                                 continue
@@ -319,21 +318,26 @@ def execute(item_name, item_category):
     med = median(priceList)
     med_Text = "${0:.2f}".format(med)
     print "The median of the list is: $" + "{0:.2f}".format(med)
-    sd = np.std(priceList)
-    print "The standard deviation of the list is: $" + "{0:.2f}".format(sd)
+
     fig = plt.figure(1, figsize=(9,6)) # create a figure object
-    fig.suptitle("Box Plot and Histogram of %s Price Data Over Past 90 Days" % itemInfo[0])
-    ax = fig.add_subplot(311) # add a subplot to the figure object
-    ax.boxplot(priceList, notch=True, vert=False, showmeans=True)
-    binNumber = len(priceList)/10
-    plt.subplot(312)
-    plt.hist(priceList, bins=binNumber, normed=True, histtype = 'step')
-    plt.subplot(313)
+    fig.suptitle("Scatter Plot and Histogram of %s Price Data Over Past 90 Days" % itemInfo[0])
+    ax1 = fig.add_subplot(211) # add a subplot to the figure object
+
     x = mpl.dates.date2num(itemData.get('sellDates'))
     y = priceList
-    plt.plot_date(x, y)
+    plt.plot_date(x, y, '.')
+    m, b = np.polyfit(x, y, 1)
+    #ax1.yaxis.set_label_position('both')
+    ax1.yaxis.set_ticks_position('both')
+    plt.tick_params(axis='both', length='4', width='2', labelright='on', labelleft='on')
+    plt.ylabel('Sale Price in USD')
+    plt.plot(x,m*x + b, 'k-', lw='1.5')
 
+    binNumber = len(priceList)/10
+    plt.subplot(212)
+    plt.hist(priceList, bins=binNumber, histtype = 'step')
+    plt.xlabel('Sale Price in USD')
+    plt.ylabel('Percentage Frequency')
 
 
 GUI()
-
