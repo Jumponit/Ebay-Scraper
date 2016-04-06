@@ -238,7 +238,18 @@ def execute(item_name, item_category = None):
     y = priceList
     plt.plot_date(x, y, '.')
     m, b = np.polyfit(x, y, 1)
-    # ax1.yaxis.set_label_position('both')
+
+    endPoint = np.polyval([m, b], x[0])
+    startPoint = np.polyval([m, b], x[len(x)-1])
+    print "Start point of line is: $" + "{0:.2f}".format(startPoint)
+    print "End point of line is: $" + "{0:.2f}".format(endPoint)
+    accStr = "According to the line of best fit, the average price has "
+    ovStr = " over the past 90 days."
+    if (endPoint < startPoint):
+        print accStr + "gone down $" + "{0:.2f}".format(startPoint-endPoint) + ovStr
+    else:
+        print accStr + "gone up $" + "{0:.2f}".format(endPoint-startPoint) + ovStr
+
     ax1.yaxis.set_ticks_position('both')
     plt.tick_params(axis='both', length='4', width='2', labelright='on', labelleft='on')
     plt.ylabel('Sale Price in USD')
@@ -320,7 +331,7 @@ def GUI():
                 canvas.move(pic, -155, -125)
 
     root.wm_title("The Ebae")
-    root.tk.call('wm', 'iconbitmap', root._w, '-default', './price_tag.ico')
+    #root.tk.call('wm', 'iconbitmap', root._w, '-default', './price_tag.ico')
     frame1 = Frame(root)
     frame1.grid(sticky = W)
     frame1.pack()
@@ -388,6 +399,7 @@ def GUI():
 
 
 GUI()
+
 
 # ransac algorithm for finding outliers of model
 # must determine model first for ransac
