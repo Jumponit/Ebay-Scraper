@@ -279,7 +279,7 @@ def GUI():
             if category_Select.curselection() != None and prev_cat_item == item_entry:
                 execute(item_entry, category_Lookup.get(category_Select.get(ACTIVE)))
                 if (str(mean_Text) == 'failed'):
-                    canvas.background = PhotoImage(file = "C:\\Users\\jumpo_000\\Documents\\Programming\\Python\\Ebay Scraper\\Ebay\\SadSponge.gif")
+                    canvas.background = PhotoImage(file = "./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image = canvas.background)
                     canvas.move(pic, -155, -125)
                     mean_Display.config(text = 'Search Failed')
@@ -294,13 +294,13 @@ def GUI():
                 im.paste(graph, graph)
                 graph = im.convert('RGB').convert('P', palette = Image.ADAPTIVE)
                 graph.save("fig.gif")
-                canvas.background = PhotoImage(file = "C:\\Users\\jumpo_000\\Documents\\Programming\\Python\\Ebay Scraper\\Ebay\\fig.gif")
+                canvas.background = PhotoImage(file = "./fig.gif")
                 pic = canvas.create_image(400, 270, image = canvas.background)
                 canvas.move(pic, -155, -125)
             else:
                 execute(item_entry)
                 if (str(mean_Text) == 'failed'):
-                    canvas.background = PhotoImage(file="C:\\Users\\jumpo_000\\Documents\\Programming\\Python\\Ebay Scraper\\Ebay\\SadSponge.gif")
+                    canvas.background = PhotoImage(file="./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image=canvas.background)
                     canvas.move(pic, -155, -125)
                     mean_Display.config(text="Search Failed")
@@ -315,12 +315,12 @@ def GUI():
                 im.paste(graph, graph)
                 graph = im.convert('RGB').convert('P', palette = Image.ADAPTIVE)
                 graph.save("fig.gif")
-                canvas.background = PhotoImage(file = "C:\\Users\\jumpo_000\\Documents\\Programming\\Python\\Ebay Scraper\\Ebay\\fig.gif")
+                canvas.background = PhotoImage(file = "./fig.gif")
                 pic = canvas.create_image(400, 270, image = canvas.background)
                 canvas.move(pic, -155, -125)
 
     root.wm_title("The Ebae")
-    root.tk.call('wm', 'iconbitmap', root._w, '-default', 'C:\\Users\\jumpo_000\\Documents\\Programming\\Python\\Ebay Scraper\\Ebay\\price_tag.ico')
+    root.tk.call('wm', 'iconbitmap', root._w, '-default', './price_tag.ico')
     frame1 = Frame(root)
     frame1.grid(sticky = W)
     frame1.pack()
