@@ -230,8 +230,6 @@ def execute(item_name, item_category = None):
     mean_Text = "${0:.2f}".format(mean)
     med = median(priceList)
     med_Text = "${0:.2f}".format(med)
-    sd = np.std(priceList)
-    print "The standard deviation of the list is: $" + "{0:.2f}".format(sd)
 
     plt.clf()
     fig = plt.figure(1, figsize=(9, 6))  # create a figure object
@@ -240,9 +238,22 @@ def execute(item_name, item_category = None):
 
     x = mpl.dates.date2num(itemData.get('sellDates'))
     y = priceList
+    ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%d/%m/%y'))
+    mpl.dates.DateFormatter("%d/%m/%y")
     plt.plot_date(x, y, '.')
     m, b = np.polyfit(x, y, 1)
-    # ax1.yaxis.set_label_position('both')
+
+    endPoint = np.polyval([m, b], x[0])
+    startPoint = np.polyval([m, b], x[len(x)-1])
+    print "Start point of line is: $" + "{0:.2f}".format(startPoint)
+    print "End point of line is: $" + "{0:.2f}".format(endPoint)
+    accStr = "According to the line of best fit, the average price has "
+    ovStr = " over the past 90 days."
+    if (endPoint < startPoint):
+        print accStr + "gone down $" + "{0:.2f}".format(startPoint-endPoint) + ovStr
+    else:
+        print accStr + "gone up $" + "{0:.2f}".format(endPoint-startPoint) + ovStr
+
     ax1.yaxis.set_ticks_position('both')
     plt.tick_params(axis='both', length='4', width='2', labelright='on', labelleft='on')
     plt.ylabel('Sale Price in USD')
@@ -396,10 +407,3 @@ def GUI():
 
 GUI()
 
-# ransac algorithm for finding outliers of model
-# must determine model first for ransac
-# box and whisker plots and histogram
-# put data into dataframe
-# stats models
-# OLS is the simplist model
-# Logistic regression for decision or probability
