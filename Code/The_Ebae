@@ -372,14 +372,14 @@ def GUI():
     category_Select.pack(side = RIGHT, fill = X)
 
     mean_Label = Label(frame3, text = "Mean Price: ")
-    mean_Label.pack(side = LEFT)
+    mean_Label.grid(row = 0, column = 0, sticky = E)
     mean_Display = Label(frame3, text = "$0.00")
-    mean_Display.pack(side = RIGHT)
+    mean_Display.grid(row = 0, column = 1)
 
-    median_Label = Label(frame4, text = "Median Price: ")
-    median_Label.pack(side = LEFT)
-    median_Display = Label(frame4, text = "$0.00")
-    median_Display.pack(side = RIGHT)
+    median_Label = Label(frame3, text = "Median Price: ")
+    median_Label.grid(row = 1, column = 0, sticky = E)
+    median_Display = Label(frame3, text = "$0.00")
+    median_Display.grid(row = 1, column = 1)
 
     initial_search_Button = Tkinter.Button(frame5,
                                    text = "Get Categories",
