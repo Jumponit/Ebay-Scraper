@@ -238,7 +238,7 @@ def execute(item_name, item_category = None):
 
     x = mpl.dates.date2num(itemData.get('sellDates'))
     y = priceList
-    ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%d/%m/%y'))
+    ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%m/%d/%y'))
     mpl.dates.DateFormatter("%d/%m/%y")
     plt.plot_date(x, y, '.')
     m, b = np.polyfit(x, y, 1)
