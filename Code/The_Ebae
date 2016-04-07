@@ -185,7 +185,7 @@ def initial_execute(item_name):
     pastDate = date.today() - timedelta(days=90)
     datestr = pastDate.strftime('%Y-%m-%d') + 'T00:00:00.000Z'
     try:
-        api = Finding(config_file = "./ebay.yaml")
+        api = Finding(appid = "TaylorMo-1104-4ca1-bc59-34b44b585cf0", config_file = None)
         api_request = {
             'keywords': item_name,
             'itemFilter': [
