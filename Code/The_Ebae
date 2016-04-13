@@ -291,8 +291,8 @@ def GUI():
 
         item_entry = search_Box.get()
         if item_entry != '' :
-            mean_Display.config(text='                                  Searching...                                      ')
-            median_Display.config(text='                             Please Wait...                                   ')
+            mean_Display.config(text='Searching...')
+            median_Display.config(text='Please Wait...')
             root.update_idletasks()
             if category_Select.curselection() != None and prev_cat_item == item_entry:
                 execute(item_entry, category_Lookup.get(category_Select.get(ACTIVE)))
