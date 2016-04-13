@@ -337,8 +337,14 @@ def GUI():
                 pic = canvas.create_image(400, 270, image = canvas.background)
                 canvas.move(pic, -155, -125)
 
+    def help():
+        help_Window = Toplevel()
+        help_Window.title('Application Usage')
+        message = Message(help_Window, text = 'Figure it out jackass!')
+        message.pack()
+
     root.wm_title("The Ebae")
-    #root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
+    root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
     frame1 = Frame(root)
     frame1.grid(sticky = W)
     frame1.pack()
@@ -385,6 +391,11 @@ def GUI():
                                    font = ("Helvetica", 10),
                                    command = lambda: run())
     search_Button.grid(row = 0, column = 1, padx = 25)
+    help_Button = Tkinter.Button(frame4,
+                                   text="Help",
+                                   font=("Helvetica", 10),
+                                   command=lambda: help())
+    help_Button.grid(row=0, column=2, padx=50)
 
     canvas = Canvas(root, width = 480, height = 290)
     canvas.pack()
@@ -398,4 +409,3 @@ def GUI():
 
 
 GUI()
-
