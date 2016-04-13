@@ -350,26 +350,20 @@ def GUI():
     frame3.pack()
     frame4 = Frame(root)
     frame4.grid(sticky = W)
-    frame4.pack()
-    frame5 = Frame(root)
-    frame5.grid(sticky = W)
-    frame5.pack(side = BOTTOM)
+    frame4.pack(side = BOTTOM)
 
     header_Label = Label(frame1, text = "Ebay Price Checker", font = ("Ariel", "14"))
     header_Label.pack()
 
-    search_Label = Label(frame1, text = "Item Name:  ")
-    search_Label.pack(side = LEFT)
-    search_Box = Entry(frame1, textvariable = item_entry)
-    search_Box.grid(column = 1)
-    search_Box.pack(fill = Tkinter.X, expand = 1, side = RIGHT)
+    search_Label = Label(frame2, text = "Item Name:  ")
+    search_Label.grid(row = 0, column = 0)
+    search_Box = Entry(frame2, textvariable = item_entry)
+    search_Box.grid(row = 0, column = 1, columnspan = 2)
 
     category_Label = Label(frame2, text = "Category: ")
-    category_Label.pack(side = LEFT, )
+    category_Label.grid(row = 1, column = 0)
     category_Select = Listbox(frame2, selectmode = 'SINGLE')
-    category_Select.grid(column = 1)
-    category_Select.config(width = 28)
-    category_Select.pack(side = RIGHT, fill = X)
+    category_Select.grid(row = 1, column = 1, columnspan = 2)
 
     mean_Label = Label(frame3, text = "Mean Price: ")
     mean_Label.grid(row = 0, column = 0, sticky = E)
@@ -381,19 +375,17 @@ def GUI():
     median_Display = Label(frame3, text = "$0.00")
     median_Display.grid(row = 1, column = 1)
 
-    initial_search_Button = Tkinter.Button(frame5,
+    initial_search_Button = Tkinter.Button(frame4,
                                    text = "Get Categories",
                                    font = ("Helvetica", 10),
                                    command = lambda: irun())
-    initial_search_Button.grid(row = 0, column = 0, padx = (100, 10), sticky = W)
-    initial_search_Button.pack(side = LEFT)
-    search_Button = Tkinter.Button(frame5,
+    initial_search_Button.grid(row = 0, column = 0, padx = 25)
+    search_Button = Tkinter.Button(frame4,
                                    text = "Search",
                                    font = ("Helvetica", 10),
                                    command = lambda: run())
-    search_Button.grid(row = 0, column = 0, padx = (100, 10), sticky = E)
-    search_Button.pack(side = RIGHT)
-
+    search_Button.grid(row = 0, column = 1, padx = 25)
+    
     canvas = Canvas(root, width = 480, height = 290)
     canvas.pack()
 
