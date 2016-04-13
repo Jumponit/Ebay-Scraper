@@ -21,6 +21,9 @@ from PIL import ImageTk, Image
 
 mean_Text = ''
 med_Text = ''
+startPoint_Text = ''
+endPoint_Text = ''
+change_Text = ''
 category_List = []
 category_Lookup = {}
 prev_cat_item = ''
@@ -216,6 +219,9 @@ def initial_execute(item_name):
 def execute(item_name, item_category = None):
     global mean_Text
     global med_Text
+    global startPoint_Text
+    global endPoint_Text
+    global change_Text
     global prev_cat_item
 
     itemInfo = aquire(item_name, item_category)
@@ -245,13 +251,18 @@ def execute(item_name, item_category = None):
 
     endPoint = np.polyval([m, b], x[0])
     startPoint = np.polyval([m, b], x[len(x)-1])
+
+    startPoint_Text = "${0:.2f}".format(startPoint)
+    endPoint_Text = "${0:.2f}".format(endPoint)
     print "Start point of line is: $" + "{0:.2f}".format(startPoint)
     print "End point of line is: $" + "{0:.2f}".format(endPoint)
     accStr = "According to the line of best fit, the average price has "
     ovStr = " over the past 90 days."
     if (endPoint < startPoint):
+        change_Text = "-${0:.2f}".format(startPoint-endPoint)
         print accStr + "gone down $" + "{0:.2f}".format(startPoint-endPoint) + ovStr
     else:
+        change_Text = "+${0:.2f}".format(endPoint-startPoint)
         print accStr + "gone up $" + "{0:.2f}".format(endPoint-startPoint) + ovStr
 
     ax1.yaxis.set_ticks_position('both')
@@ -283,6 +294,9 @@ def GUI():
                 category_Select.insert(END, cat)
             mean_Display.config(text = "$0.00")
             median_Display.config(text = "$0.00")
+            startPoint_Display.config(text = "$0.00")
+            endPoint_Display.config(text = "$0.00")
+            change_Display.config(text = "$0.00")
             canvas.delete("all")
             prev_cat_item = item_entry
 
@@ -302,11 +316,14 @@ def GUI():
                     pic = canvas.create_image(400, 270, image = canvas.background)
                     canvas.move(pic, -155, -125)
                     mean_Display.config(text = 'Search Failed')
-                    median_Display.config(text = 'Try Something Else')
+                    median_Display.config(text = 'Try Again')
                     return
 
                 mean_Display.config(text = str(mean_Text))
                 median_Display.config(text = str(med_Text))
+                startPoint_Display.config(text = str(startPoint_Text))
+                endPoint_Display.config(text = str(endPoint_Text))
+                change_Display.config(text = str(change_Text))
                 graph = Image.open("fig1.png")
                 graph = graph.resize((400, 270), Image.ANTIALIAS)
                 im = Image.new('RGBA', graph.size, (255,255,255))
@@ -323,12 +340,15 @@ def GUI():
                     canvas.background = PhotoImage(file="./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image=canvas.background)
                     canvas.move(pic, -155, -125)
-                    mean_Display.config(text='Search Failed')
-                    median_Display.config(text='Try Something Else')
+                    mean_Display.config(text="Search Failed")
+                    median_Display.config(text="Try Something Else")
                     return
 
                 mean_Display.config(text = str(mean_Text))
                 median_Display.config(text = str(med_Text))
+                startPoint_Display.config(text = str(startPoint_Text))
+                endPoint_Display.config(text = str(endPoint_Text))
+                change_Display.config(text = str(change_Text))
                 graph = Image.open("fig1.png")
                 graph = graph.resize((400, 270), Image.ANTIALIAS)
                 im = Image.new('RGBA', graph.size, (255,255,255))
@@ -345,20 +365,21 @@ def GUI():
         message = Message(help_Window, text = 'Figure it out jackass!')
         message.pack()
 
+
     root.wm_title("The Ebae")
-    root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
+    #root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
     frame1 = Frame(root)
-    frame1.grid(sticky = W)
     frame1.pack()
-    frame2 = Frame(root)
-    frame2.grid(sticky = W)
-    frame2.pack()
-    frame3 = Frame(root)
-    frame3.grid(sticky = W)
-    frame3.pack()
+    frame23 = Frame(root)
+    frame23.pack()
+    frame2 = Frame(frame23)
+    frame2.grid(row = 0, column = 0, sticky = W)
+    frame3 = Frame(frame23)
+    frame3.grid(row = 0, column = 1, sticky = E)
     frame4 = Frame(root)
-    frame4.grid(sticky = W)
-    frame4.pack(side = BOTTOM)
+    frame4.pack()
+    frame5 = Frame(root)
+    frame5.pack(side = BOTTOM)
 
     header_Label = Label(frame1, text = "Ebay Price Checker", font = ("Ariel", "14"))
     header_Label.pack()
@@ -376,28 +397,44 @@ def GUI():
     mean_Label = Label(frame3, text = "Mean Price: ")
     mean_Label.grid(row = 0, column = 0, sticky = E)
     mean_Display = Label(frame3, text = "$0.00")
-    mean_Display.grid(row = 0, column = 1)
+    mean_Display.grid(row = 0, column = 1, sticky = W)
 
     median_Label = Label(frame3, text = "Median Price: ")
     median_Label.grid(row = 1, column = 0, sticky = E)
     median_Display = Label(frame3, text = "$0.00")
-    median_Display.grid(row = 1, column = 1)
+    median_Display.grid(row = 1, column = 1, sticky = W)
 
-    initial_search_Button = Tkinter.Button(frame4,
+    startPoint_Label = Label(frame3, text = "Start Point: ")
+    startPoint_Label.grid(row = 2, column = 0, sticky = E)
+    startPoint_Display = Label(frame3, text = "$0.00")
+    startPoint_Display.grid(row = 2, column = 1, sticky = W)
+
+    endPoint_Label = Label(frame3, text = "End Point: ")
+    endPoint_Label.grid(row = 3, column = 0, sticky = E)
+    endPoint_Display = Label(frame3, text = "$0.00")
+    endPoint_Display.grid(row = 3, column = 1, sticky = W)
+
+    change_Label = Label(frame4, text = "Change in Average Price: ")
+    change_Label.grid(row = 0, column = 0, sticky = E)
+    change_Display = Label(frame4, text = "$0.00")
+    change_Display.grid(row = 0, column = 1, sticky = W)
+
+    initial_search_Button = Tkinter.Button(frame5,
                                    text = "Get Categories",
                                    font = ("Helvetica", 10),
                                    command = lambda: irun())
     initial_search_Button.grid(row = 0, column = 0, padx = 25)
-    search_Button = Tkinter.Button(frame4,
+    search_Button = Tkinter.Button(frame5,
                                    text = "Search",
                                    font = ("Helvetica", 10),
                                    command = lambda: run())
     search_Button.grid(row = 0, column = 1, padx = 25)
-    help_Button = Tkinter.Button(frame4,
+
+    help_Button = Tkinter.Button(root,
                                    text="Help",
                                    font=("Helvetica", 10),
                                    command=lambda: help())
-    help_Button.grid(row=0, column=2, padx=50)
+    help_Button.place(rely = 1.0, relx = 1.0, anchor = SE)
 
     canvas = Canvas(root, width = 480, height = 290)
     canvas.pack()
