@@ -291,11 +291,12 @@ def GUI():
 
         item_entry = search_Box.get()
         if item_entry != '' :
-            mean_Display.config(text='Searching...')
-            median_Display.config(text='Please Wait...')
+            canvas.delete("all")
+            searching = canvas.create_text(250,100,text = "Searching...\nPlease Wait...")
             root.update_idletasks()
             if category_Select.curselection() != None and prev_cat_item == item_entry:
                 execute(item_entry, category_Lookup.get(category_Select.get(ACTIVE)))
+                canvas.delete(searching)
                 if (str(mean_Text) == 'failed'):
                     canvas.background = PhotoImage(file = "./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image = canvas.background)
@@ -317,12 +318,13 @@ def GUI():
                 canvas.move(pic, -155, -125)
             else:
                 execute(item_entry)
+                canvas.delete(searching)
                 if (str(mean_Text) == 'failed'):
                     canvas.background = PhotoImage(file="./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image=canvas.background)
                     canvas.move(pic, -155, -125)
-                    mean_Display.config(text="Search Failed")
-                    median_Display.config(text="Try Something Else")
+                    mean_Display.config(text='Search Failed')
+                    median_Display.config(text='Try Something Else')
                     return
 
                 mean_Display.config(text = str(mean_Text))
