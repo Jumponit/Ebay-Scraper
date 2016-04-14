@@ -242,6 +242,10 @@ def execute(item_name, item_category = None):
         mean_Text = 'failed'
         return
     priceList = itemData.get('soldPrices')
+    binNumber = len(priceList) / 10
+    if (binNumber < 1):
+        mean_Text='failed'
+        return
     print "Number of entries found: %s" % len(priceList)
     mean = sum(priceList)/float(len(priceList))
 
@@ -282,11 +286,11 @@ def execute(item_name, item_category = None):
     plt.ylabel('Sale Price in USD')
     plt.plot(x, m * x + b, 'k-', lw='1.5')
 
-    binNumber = len(priceList) / 10
+
     plt.subplot(212)
     plt.hist(priceList, bins=binNumber, histtype='step')
     plt.xlabel('Sale Price in USD')
-    plt.ylabel('Percentage Frequency')
+    plt.ylabel('Frequency')
     plt.savefig("fig1.png", bbox_inches = 'tight')
 
 
