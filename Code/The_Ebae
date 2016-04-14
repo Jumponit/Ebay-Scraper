@@ -317,18 +317,17 @@ def GUI():
 
         item_entry = search_Box.get()
         if item_entry != '' :
-            canvas.delete("all")
-            searching = canvas.create_text(250,100,text = "Searching...\nPlease Wait...")
+            canvas.delete('all')
+            canvas.create_text(250,100,text = 'Searching...\nPlease Wait...')
             root.update_idletasks()
             if category_Select.curselection() != None and prev_cat_item == item_entry:
                 execute(item_entry, category_Lookup.get(category_Select.get(ACTIVE)))
-                canvas.delete(searching)
+                canvas.delete('all')
                 if (str(mean_Text) == 'failed'):
                     canvas.background = PhotoImage(file = "./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image = canvas.background)
-                    canvas.move(pic, -155, -125)
-                    mean_Display.config(text = 'Search Failed')
-                    median_Display.config(text = 'Try Again')
+                    canvas.move(pic, -155, -175)
+                    canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                     return
 
                 mean_Display.config(text = str(mean_Text))
@@ -347,13 +346,12 @@ def GUI():
                 canvas.move(pic, -155, -125)
             else:
                 execute(item_entry)
-                canvas.delete(searching)
+                canvas.delete('all')
                 if (str(mean_Text) == 'failed'):
                     canvas.background = PhotoImage(file="./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image=canvas.background)
                     canvas.move(pic, -155, -125)
-                    mean_Display.config(text="Search Failed")
-                    median_Display.config(text="Try Something Else")
+                    canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                     return
 
                 mean_Display.config(text = str(mean_Text))
@@ -379,7 +377,7 @@ def GUI():
 
 
     root.wm_title("The Ebae")
-    #root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
+    root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
     frame1 = Frame(root)
     frame1.pack()
     frame23 = Frame(root)
