@@ -326,7 +326,7 @@ def GUI():
                 if (str(mean_Text) == 'failed'):
                     canvas.background = PhotoImage(file = "./SadSponge.gif")
                     pic = canvas.create_image(400, 270, image = canvas.background)
-                    canvas.move(pic, -155, -175)
+                    canvas.move(pic, -155, -125)
                     canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                     return
 
