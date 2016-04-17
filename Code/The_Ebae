@@ -396,13 +396,13 @@ def GUI():
     header_Label = Label(frame1, text = "Ebay Price Checker", font = ("Ariel", "14"))
     header_Label.pack()
 
-    search_Label = Label(frame2, text = "Item Name: ")
-    search_Label.grid(row = 0, column = 0)
+    search_Label = Label(frame2, text = "Item Name:")
+    search_Label.grid(row = 0, column = 0, sticky = E)
     search_Box = Entry(frame2, textvariable = item_entry)
     search_Box.grid(row = 0, column = 1, columnspan = 2)
 
-    category_Label = Label(frame2, text = "Category: ")
-    category_Label.grid(row = 1, column = 0)
+    category_Label = Label(frame2, text = "Category:")
+    category_Label.grid(row = 1, column = 0, sticky = E)
     category_Select = Listbox(frame2, selectmode = 'SINGLE')
     category_Select.grid(row = 1, column = 1, columnspan = 2)
 
