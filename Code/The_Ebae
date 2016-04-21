@@ -42,6 +42,12 @@ USAGE_Text = "USAGE FOR Ebay PRICE CHECKER:\n" + USAGE_Mean + USAGE_Median + USA
 
 
 # The function that searches via the Ebay API
+# Function :    search
+# Description : function to make call to Ebay Finding API with a search request and return the dictionary
+#               returned by the API
+# Params :      itemInfo - list of specified item info to use in search
+#               pageNum - int number of pages to search through
+# Returns :     response - dictionary of results from Ebay Finding API
 def search(itemInfo, pageNum):
     category = itemInfo[2]
     startDate = itemInfo[1]
@@ -81,6 +87,11 @@ def search(itemInfo, pageNum):
 
 
 # The method to parse the search response dictionary
+# Function :    parseDict
+# Description : function to parse through a dictionary returned from the Finding API and create a dictionary of
+#               desired information
+# Params :      dit - dictionary to parse
+# Returns :     dataDict - dictionary of desired information obtained from parameter dictionary
 def parseDict(dit):
     soldPrices = []
     sellDates = []
@@ -128,13 +139,12 @@ def parseDict(dit):
     else:
         print "Error, invalid item name, no results"
 
-        # Test events
-        # print len(soldPrices)
-        # for x in soldPrices:
-        # print x
 
-
-# Method to extend dict1 with info from dict2
+# Function :    extendDict
+# Description : function to extend a dictionary with information from a second dictionary
+# Params :      dict1 - dictionary to be extended
+#               dict2 - dictionary to get information from to add to the first dictionary
+# Returns :     dict1 - dict1 parameter appended with information from dict2
 def extendDict(dict1, dict2):
     keys = dict1.keys()
     for key in keys:
@@ -142,7 +152,11 @@ def extendDict(dict1, dict2):
     return dict1
 
 
-#The method that does the multi-page loop of the search
+# Function :    createDataDict
+# Description : function to create a dictionary of search results with useful information such as sell price,
+#               date sold, and item condition
+# Params :      itemInfo - list of item info used in search
+# Returns :     data - dictionary of all search results with only useful information
 def createDataDict(itemInfo):
     page = 1
     response = search(itemInfo, page)
@@ -169,6 +183,11 @@ def createDataDict(itemInfo):
 
 
 # The function to get input from the user
+# Function :    acquire
+# Description : function to generate list of needed item info for search
+# Params :      item_name - name of item
+#               item_category - item category to search in
+# Returns :     info - list of item info needed for search
 def aquire(item_name, item_category):
     info = []
     time.sleep(1)
@@ -181,7 +200,10 @@ def aquire(item_name, item_category):
     return info
 
 
-#The Method to get the median
+# Function :    median
+# Description : function to find median of list parameter
+# Params :      lst - list to find median of
+# Returns :     median of parameter lst
 def median(lst):
     lst = sorted(lst)
     if len(lst) < 1:
@@ -193,6 +215,10 @@ def median(lst):
 
 
 #The function to get the desired category from the user
+# Function :    initial_execute
+# Description : function to perform initial search for specified item and generate a list of categories found
+#               which are stored in global category_List in order of descending frequency
+# Params :      item_name - name of item to search for
 def initial_execute(item_name):
     global category_List
     global category_Lookup
@@ -227,7 +253,10 @@ def initial_execute(item_name):
     category_List.reverse()
 
 
-#The main execution of the search
+# Function :    execute
+# Description : main function which handles execution of program
+# Params :      item_name - name of item to search for
+#               item_category - category to search in
 def execute(item_name, item_category = None):
     global mean_Text
     global med_Text
@@ -294,11 +323,14 @@ def execute(item_name, item_category = None):
     plt.savefig("fig1.png", bbox_inches = 'tight')
 
 
-#The function to create the GUI
+# Function :    GUI
+# Description : creates GUI and defines behavior for each button present in GUI
 def GUI():
     root = Tkinter.Tk()
     item_entry = Tkinter.StringVar()
 
+    # Function :    irun
+    # Description : function connected to Get Categories button to generate categories for the user
     def irun():
         global prev_cat_item
 
@@ -316,6 +348,8 @@ def GUI():
             canvas.delete("all")
             prev_cat_item = item_entry
 
+    # Function :    run
+    # Description : function connected to Search button to search for an item, generate results, and display the results
     def run():
         global category_Lookup
 
@@ -373,12 +407,15 @@ def GUI():
                 pic = canvas.create_image(400, 270, image = canvas.background)
                 canvas.move(pic, -155, -125)
 
+    # Function :    help
+    # Description : function connected to Help button to display a usage window for the user
     def help():
         help_Window = Toplevel()
         help_Window.title('Application Usage')
         message = Message(help_Window, text = USAGE_Text)
         message.pack()
 
+    # Code to create GUI display
 
     root.wm_title("The Ebae")
     #root.tk.call('wm', 'iconbitmap', root._w, '-default', './Price-Tag.ico')
@@ -452,6 +489,8 @@ def GUI():
     canvas = Canvas(root, width = 480, height = 290)
     canvas.pack()
 
+    # Function :    close
+    # Description : function to make program exit when GUI window is closed
     def close():
         root.quit()
 
