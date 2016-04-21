@@ -95,14 +95,12 @@ def search(itemInfo, pageNum):
 def parseDict(dit):
     soldPrices = []
     sellDates = []
-    conditions = []
     results = dit.get('searchResult')
     itemList = results.get('item')
     if (itemList != None):
         for item in itemList:
             shipInfo = item.get('shippingInfo')
-            conditionInfo = item.get('condition')
-            if (type(shipInfo) == dict and type(conditionInfo) == dict):
+            if (type(shipInfo) == dict):
                 shipServCost = shipInfo.get('shippingServiceCost')
                 if (type(shipServCost) == dict):
                     shipCost = shipServCost.get('value')
@@ -123,8 +121,6 @@ def parseDict(dit):
                             priceVal = currentPrice.get('value')
                             soldAmount = float(priceVal)
                             soldPrices.append((shipping + soldAmount))
-                            condition = conditionInfo.get('conditionDisplayName')
-                            conditions.append(condition)
                         else:
                             continue
                     else:
@@ -134,7 +130,7 @@ def parseDict(dit):
             else:
                 continue
 
-        dataDict = dict([('soldPrices', soldPrices), ('sellDates', sellDates), ('conditions', conditions)])
+        dataDict = dict([('soldPrices', soldPrices), ('sellDates', sellDates)])
         return dataDict
     else:
         print "Error, invalid item name, no results"
@@ -153,8 +149,7 @@ def extendDict(dict1, dict2):
 
 
 # Function :    createDataDict
-# Description : function to create a dictionary of search results with useful information such as sell price,
-#               date sold, and item condition
+# Description : function to create a dictionary of search results with sell price and sell date
 # Params :      itemInfo - list of item info used in search
 # Returns :     data - dictionary of all search results with only useful information
 def createDataDict(itemInfo):
