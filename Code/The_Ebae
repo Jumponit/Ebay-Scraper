@@ -315,7 +315,6 @@ def execute(item_name, item_category = None):
     plt.ylabel('Sale Price in USD')
     plt.plot(x, m * x + b, 'k-', lw='1.5')
 
-
     plt.subplot(212)
     plt.hist(priceList, bins=binNumber, histtype='step')
     plt.xlabel('Sale Price in USD')
@@ -437,12 +436,13 @@ def GUI():
     search_Label.grid(row = 0, column = 0, sticky = E)
     search_Box = Entry(frame2, textvariable = item_entry)
     search_Box.grid(row = 0, column = 1, columnspan = 2)
+    search_Box.config(width = 30)
 
     category_Label = Label(frame2, text = "Category:")
     category_Label.grid(row = 1, column = 0, sticky = E)
     category_Select = Listbox(frame2, selectmode = 'SINGLE')
     category_Select.grid(row = 1, column = 1, columnspan = 2)
-
+    category_Select.config(width = 30)
 
     initial_search_Button = Tkinter.Button(frame3,
                                    text = "Get Categories",
