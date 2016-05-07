@@ -24,6 +24,7 @@ med_Text = ''
 startPoint_Text = ''
 endPoint_Text = ''
 change_Text = ''
+quality_Text = ''
 category_List = []
 category_Lookup = {}
 prev_cat_item = ''
@@ -209,6 +210,7 @@ def median(lst):
             return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
 
 
+
 #The function to get the desired category from the user
 # Function :    initial_execute
 # Description : function to perform initial search for specified item and generate a list of categories found
@@ -248,6 +250,17 @@ def initial_execute(item_name):
     category_List.reverse()
 
 
+def RANSAC(data, model, n, k, t, d):
+    iterations = 0
+    bestFit = None
+    bestErr = np.inf
+    best_inlier_idxs = None
+    while iterations < k:
+        maybe_idxs, test_idxs = random_partition(n, data.shape[0])
+
+
+
+
 # Function :    execute
 # Description : main function which handles execution of program
 # Params :      item_name - name of item to search for
@@ -258,6 +271,7 @@ def execute(item_name, item_category = None):
     global startPoint_Text
     global endPoint_Text
     global change_Text
+    global quality_Text
     global prev_cat_item
 
     itemInfo = aquire(item_name, item_category)
@@ -266,13 +280,14 @@ def execute(item_name, item_category = None):
         mean_Text = 'failed'
         return
     priceList = itemData.get('soldPrices')
-    print "Number of entries found: %s" % len(priceList)
-    if (len(priceList) <= 20):
-        binNumber = len(priceList)
+    priceListLength = len(priceList)
+    print "Number of entries found: %s" % priceListLength
+    if (priceListLength <= 20):
+        binNumber = priceListLength
     else:
-        binNumber = len(priceList) / 10
+        binNumber = priceListLength / 10
 
-    mean = sum(priceList)/float(len(priceList))
+    mean = sum(priceList)/float(priceListLength)
     mean_Text = "${0:.2f}".format(mean)
     med = median(priceList)
     med_Text = "${0:.2f}".format(med)
@@ -286,7 +301,7 @@ def execute(item_name, item_category = None):
     y = priceList
     ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('%m/%d/%y'))
     mpl.dates.DateFormatter("%d/%m/%y")
-    plt.plot_date(x, y, '.')
+    plt.plot_date(x, y, 'k.')
     m, b = np.polyfit(x, y, 1)
 
     endPoint = np.polyval([m, b], x[0])
@@ -308,7 +323,21 @@ def execute(item_name, item_category = None):
     ax1.yaxis.set_ticks_position('both')
     plt.tick_params(axis='both', length='4', width='2', labelright='on', labelleft='on')
     plt.ylabel('Sale Price in USD')
-    plt.plot(x, m * x + b, 'k-', lw='1.5')
+    if (priceListLength < 20):
+        quality_Text = "Very Weak"
+        plt.plot(x, m * x + b, 'r-', lw='2')
+    elif (priceListLength < 50):
+        quality_Text = "Weak"
+        plt.plot(x, m * x + b, 'm-', lw='2')
+    elif (priceListLength < 90):
+        quality_Text = "Moderate"
+        plt.plot(x, m * x + b, 'y-', lw='2')
+    elif (priceListLength < 180):
+        quality_Text = "Strong"
+        plt.plot(x, m * x + b, 'c-', lw='2')
+    else:
+        quality_Text = "Very Strong"
+        plt.plot(x, m * x + b, 'g-', lw='2')
 
     plt.subplot(212)
     plt.hist(priceList, bins=binNumber, histtype='step')
@@ -339,6 +368,7 @@ def GUI():
             startPoint_Display.config(text = "$0.00")
             endPoint_Display.config(text = "$0.00")
             change_Display.config(text = "$0.00")
+            quality_Display.config(text = quality_Text)
             canvas.delete("all")
             prev_cat_item = item_entry
 
@@ -367,6 +397,7 @@ def GUI():
                 startPoint_Display.config(text = str(startPoint_Text))
                 endPoint_Display.config(text = str(endPoint_Text))
                 change_Display.config(text = str(change_Text))
+                quality_Display.config(text = quality_Text)
                 graph = Image.open("fig1.png")
                 graph = graph.resize((400, 270), Image.ANTIALIAS)
                 im = Image.new('RGBA', graph.size, (255,255,255))
@@ -391,6 +422,7 @@ def GUI():
                 startPoint_Display.config(text = str(startPoint_Text))
                 endPoint_Display.config(text = str(endPoint_Text))
                 change_Display.config(text = str(change_Text))
+                quality_Display.config(text = quality_Text)
                 graph = Image.open("fig1.png")
                 graph = graph.resize((400, 270), Image.ANTIALIAS)
                 im = Image.new('RGBA', graph.size, (255,255,255))
@@ -480,6 +512,11 @@ def GUI():
     change_Label.grid(row = 0, column = 0, sticky = E)
     change_Display = Label(frame4, text = "$0.00")
     change_Display.grid(row = 0, column = 1, sticky = W)
+
+    quality_Label = Label(frame4, text = "Confidence of Line: ")
+    quality_Label.grid(row = 1, column = 0, sticky = E)
+    quality_Display = Label(frame4, text = "")
+    quality_Display.grid(row = 1, column = 1, sticky = W)
 
     canvas = Canvas(root, width = 480, height = 290)
     canvas.pack()
