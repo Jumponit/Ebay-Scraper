@@ -368,7 +368,7 @@ def GUI():
             startPoint_Display.config(text = "$0.00")
             endPoint_Display.config(text = "$0.00")
             change_Display.config(text = "$0.00")
-            quality_Display.config(text = quality_Text)
+            quality_Display.config(text = "")
             canvas.delete("all")
             prev_cat_item = item_entry
 
