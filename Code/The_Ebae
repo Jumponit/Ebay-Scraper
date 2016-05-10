@@ -14,11 +14,11 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import time
 import socket
-import FileDialog
 import Tkinter
 from Tkinter import *
 from PIL import ImageTk, Image
 
+results_Text = ''
 mean_Text = ''
 med_Text = ''
 startPoint_Text = ''
@@ -250,22 +250,13 @@ def initial_execute(item_name):
     category_List.reverse()
 
 
-def RANSAC(data, model, n, k, t, d):
-    iterations = 0
-    bestFit = None
-    bestErr = np.inf
-    best_inlier_idxs = None
-    while iterations < k:
-        maybe_idxs, test_idxs = random_partition(n, data.shape[0])
-
-
-
 
 # Function :    execute
 # Description : main function which handles execution of program
 # Params :      item_name - name of item to search for
 #               item_category - category to search in
 def execute(item_name, item_category = None):
+    global results_Text
     global mean_Text
     global med_Text
     global startPoint_Text
@@ -281,6 +272,7 @@ def execute(item_name, item_category = None):
         return
     priceList = itemData.get('soldPrices')
     priceListLength = len(priceList)
+    results_Text = str(priceListLength) + " Results Found"
     print "Number of entries found: %s" % priceListLength
     if (priceListLength <= 20):
         binNumber = priceListLength
@@ -363,6 +355,7 @@ def GUI():
             initial_execute(item_entry)
             for cat in category_List:
                 category_Select.insert(END, cat)
+            results_Display.config(text = "")
             mean_Display.config(text = "$0.00")
             median_Display.config(text = "$0.00")
             startPoint_Display.config(text = "$0.00")
@@ -392,6 +385,7 @@ def GUI():
                     canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                     return
 
+                results_Display.config(text = str(results_Text))
                 mean_Display.config(text = str(mean_Text))
                 median_Display.config(text = str(med_Text))
                 startPoint_Display.config(text = str(startPoint_Text))
@@ -417,6 +411,7 @@ def GUI():
                     canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                     return
 
+                results_Display.config(text = "")
                 mean_Display.config(text = str(mean_Text))
                 median_Display.config(text = str(med_Text))
                 startPoint_Display.config(text = str(startPoint_Text))
@@ -471,42 +466,45 @@ def GUI():
     category_Select.grid(row = 1, column = 1, columnspan = 2)
     category_Select.config(width = 30)
 
+    results_Display = Label(frame3, text = "")
+    results_Display.grid(row = 0, column = 0, columnspan = 2)
+
     initial_search_Button = Tkinter.Button(frame3,
                                    text = "Get Categories",
                                    font = ("Helvetica", 10),
                                    command = lambda: irun())
-    initial_search_Button.grid(row = 0, column = 0)
+    initial_search_Button.grid(row = 1, column = 0)
     search_Button = Tkinter.Button(frame3,
                                    text = "Search",
                                    font = ("Helvetica", 10),
                                    command = lambda: run())
-    search_Button.grid(row = 0, column = 1)
+    search_Button.grid(row = 1, column = 1)
 
     mean_Label = Label(frame3, text = "Mean Price: ")
-    mean_Label.grid(row = 1, column = 0, sticky = E)
+    mean_Label.grid(row = 2, column = 0, sticky = E)
     mean_Display = Label(frame3, text = "$0.00")
-    mean_Display.grid(row = 1, column = 1, sticky = W)
+    mean_Display.grid(row = 2, column = 1, sticky = W)
 
     median_Label = Label(frame3, text = "Median Price: ")
-    median_Label.grid(row = 2, column = 0, sticky = E)
+    median_Label.grid(row = 3, column = 0, sticky = E)
     median_Display = Label(frame3, text = "$0.00")
-    median_Display.grid(row = 2, column = 1, sticky = W)
+    median_Display.grid(row = 3, column = 1, sticky = W)
 
     startPoint_Label = Label(frame3, text = "Start Point: ")
-    startPoint_Label.grid(row = 3, column = 0, sticky = E)
+    startPoint_Label.grid(row = 4, column = 0, sticky = E)
     startPoint_Display = Label(frame3, text = "$0.00")
-    startPoint_Display.grid(row = 3, column = 1, sticky = W)
+    startPoint_Display.grid(row = 4, column = 1, sticky = W)
 
     endPoint_Label = Label(frame3, text = "End Point: ")
-    endPoint_Label.grid(row = 4, column = 0, sticky = E)
+    endPoint_Label.grid(row = 5, column = 0, sticky = E)
     endPoint_Display = Label(frame3, text = "$0.00")
-    endPoint_Display.grid(row = 4, column = 1, sticky = W)
+    endPoint_Display.grid(row = 5, column = 1, sticky = W)
 
     help_Button = Tkinter.Button(frame3,
                                    text="Help",
                                    font=("Helvetica", 10),
                                    command=lambda: help())
-    help_Button.grid(row = 5, column = 0, columnspan = 2)
+    help_Button.grid(row = 6, column = 0, columnspan = 2)
 
     change_Label = Label(frame4, text = "Change in Average Price: ")
     change_Label.grid(row = 0, column = 0, sticky = E)
