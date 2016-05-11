@@ -387,7 +387,7 @@ def GUI():
                 canvas.create_text(250, 28, text = 'Search Failed\nTry Something Else')
                 return
 
-            results_Display.config(text = "")
+            results_Display.config(text = str(results_Text))
             mean_Display.config(text = str(mean_Text))
             median_Display.config(text = str(med_Text))
             startPoint_Display.config(text = str(startPoint_Text))
