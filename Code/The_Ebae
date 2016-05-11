@@ -32,15 +32,17 @@ USAGE_Item_Name = "ITEM NAME: this is where you will type in the name of the ite
 USAGE_Category = "CATEGORY: this is where categories for your item will be displayed, ordered by most frequent to " +\
                  "least frequent.\n\tClick on a category to select it for use in your search.\n\t" +\
                  "If no category is selected, results will come from all categories.\n"
+USAGE_Results = "RESULTS: number of results found is displayed above the search buttons when a search finishes\n"
 USAGE_Mean = "MEAN PRICE: this is the mean price of the results\n"
 USAGE_Median = "MEDIAN PRICE: this is the median price of the results\n"
 USAGE_Start = "START POINT: this is the start price of the line of best fit on the scatter plot of data\n"
 USAGE_End = "END POINT: this is the end price of the line of best fit on the scatter plot of data\n"
 USAGE_Change = "CHANGE IN AVERAGE PRICE: this is the difference between start point and end point\n"
+USAGE_Confidence = "CONFIDENCE OF LINE: this is a rating of confidence of line from very weak to very strong\n"
 USAGE_GetCat = "GET CATEGORIES: click this button to generate a list of categories to search\n"
 USAGE_Search = "SEARCH: click this button to search ebay and get results"
-USAGE_Text = "USAGE FOR Ebay PRICE CHECKER:\n" + USAGE_Mean + USAGE_Median + USAGE_Start + USAGE_End + USAGE_Change + USAGE_GetCat + USAGE_Search
-
+USAGE_Text = "USAGE FOR Ebay PRICE CHECKER:\n" + USAGE_Results + USAGE_Mean + USAGE_Median + USAGE_Start +\
+             USAGE_End + USAGE_Change + USAGE_Confidence + USAGE_GetCat + USAGE_Search
 
 # The function that searches via the Ebay API
 # Function :    search
